@@ -10,8 +10,8 @@ app = Flask(__name__)
 # LINE 聊天機器人的基本資料
 # LINE 的 channel_access_token, channel_secret 換成在 Line Developer 裡的資料
 
-line_bot_api = LineBotApi(config.get('line-bot', 'oaohXzEPycUDWuIpl8ZcPXCBU+ULkKMgRY8hEUm2sHjBcuaoIcracp5LzfFYccUoJitxMjpANmiXVG0cq3NadEyFE+vaNlF6uU+Auep3lmA05COvmwHARojBTQ3lHwnWVxQYln0nTm37RIlWG7bowwdB04t89/1O/w1cDnyilFU='))
-handler = WebhookHandler(config.get('line-bot', 'fb726949ac3ada1a4050cc550a81ee93'))
+line_bot_api = LineBotApi('oaohXzEPycUDWuIpl8ZcPXCBU+ULkKMgRY8hEUm2sHjBcuaoIcracp5LzfFYccUoJitxMjpANmiXVG0cq3NadEyFE+vaNlF6uU+Auep3lmA05COvmwHARojBTQ3lHwnWVxQYln0nTm37RIlWG7bowwdB04t89/1O/w1cDnyilFU=')
+handler = WebhookHandler('fb726949ac3ada1a4050cc550a81ee93')
 
 # 接收 LINE 的資訊
 @app.route("/callback", methods=['POST'])
