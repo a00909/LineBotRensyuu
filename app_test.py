@@ -38,14 +38,14 @@ def echo(event):
         try:
 
             #event.message.text = user傳的訊息
-
+            print(event)
             # 回訊息
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text="享社官網 : https://cruelshare.com/")
                 # TextSendMessage(text=event.message.text) #鸚鵡說話
             )
-
+            '''
             # 回圖片
             line_bot_api.reply_message(
                 event.reply_token,
@@ -68,7 +68,7 @@ def echo(event):
               latitude=35.65910807942215,
               longitude=139.70372892916203
             )
-
+            '''
         except:
 
             line_bot_api.reply_message(
