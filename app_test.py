@@ -21,7 +21,8 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    print(body)
+    print("[DEBUG]body:",body)
+    print("[DEBUG]signature:",signature)
 
     try:
         handler.handle(body, signature)
