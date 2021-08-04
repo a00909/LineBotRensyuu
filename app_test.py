@@ -1,9 +1,61 @@
 from __future__ import unicode_literals
 import os
+import pprint
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, TextSendMessage, ImageSendMessage, VideoSendMessage, LocationSendMessage
+
+class noteHandler:
+    noteBook = []
+    def __init__(self) -> None:
+        pass
+
+    def addNote(self,content:str):
+        reply = ""
+        try:
+            note = {}
+
+            note["id"] = len(self.noteBook) 
+            note["content"] = content
+            
+            self.noteBook.append(note)
+            reply = "succeeded"
+        except:
+            reply = "failed"
+        
+        return reply
+
+    def removeNote(self,key):
+        iKey = int(key)
+        reply = ""
+        if iKey >=0 and iKey<len(self.noteBook):
+            del self.noteBook[iKey]
+            reply = "succeeded"
+        else:
+            reply = "failed"
+        return reply
+
+    def getNote(self):
+        return str(self.noteBook)
+
+def parseNoteOperation(message:str):
+    op = message.split()
+    return op
+
+def decideNoteOperation(op:list,nh:noteHandler) -> str:
+    if op[0] == "add":
+        return nh.addNote(op[1])
+    elif op[0] == "remove":
+        return nh.removeNote(op[1])
+    elif op[0] == "show":
+        return nh.getNote()
+    else:
+        return "no such operation"
+
+nh = noteHandler()
+
+pp = pprint.PrettyPrinter(indent=4)
 
 app = Flask(__name__)
 
@@ -21,8 +73,8 @@ def callback():
     body = request.get_data(as_text=True)
     app.logger.info("Request body: " + body)
 
-    print("[DEBUG]body:",body)
-    print("[DEBUG]signature:",signature)
+    #print("[DEBUG]body:",body)
+    #print("[DEBUG]signature:",signature)
 
     try:
         handler.handle(body, signature)
@@ -31,19 +83,22 @@ def callback():
 
     return 'OK'
 
+
 # 回傳 LINE 的資料
 @handler.add(MessageEvent, message=TextMessage)
 def echo(event):
     
     if event.source.user_id != "Udeadbeefdeadbeefdeadbeefdeadbeef": #因為LINE有些預設資料,我們在此排除
         try:
-
+            
             #event.message.text = user傳的訊息
-            print(event)
+            #pp.pprint(event)
+            reply = decideNoteOperation(parseNoteOperation(event.message.text),nh)
+
             # 回訊息
             line_bot_api.reply_message(
                 event.reply_token,
-                TextSendMessage(text="享社官網 : https://cruelshare.com/")
+                TextSendMessage(text=reply)
                 # TextSendMessage(text=event.message.text) #鸚鵡說話
             )
             '''
